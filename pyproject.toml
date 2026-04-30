@@ -1,0 +1,52 @@
+
+[project]
+name = "waves"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kim Leirvik",email = "kim.leirvik@niva.no"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+    "geoalchemy2>=0.18.1",
+    "geopandas>=1.1.2",
+    "gdal (>=3.12.2,<4.0.0)",
+    "isort >=8.0.0",
+    "black >=26.3.0",
+    "nbqa >=1.9.1",
+    "ipykernel >=7.2.0"
+]
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target_version = ['py310']
+include = '\.py$'
+
+[tool.isort]
+line_length=120                # corresponds to -w  flag
+multi_line_output=3            # corresponds to -m  flag
+include_trailing_comma=true    # corresponds to -tc flag
+skip_glob = '^((?!py$).)*$'    # this makes sort all Python files
+
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+waves = { path = ".", editable = true }
+
+
+[tool.pixi.dependencies]
+libgdal-arrow-parquet = ">=3.12.2,<4"
+libgdal-pg = ">=3.12.2,<4"
+pytest = ">=9.0.2,<10"
+papermill = ">=2.7.0,<3"
+rasterio = ">=1.5.0,<2"
+pyarrow = ">=23.0.1,<24"

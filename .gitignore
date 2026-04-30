@@ -1,0 +1,21 @@
+ngu_sediment/*
+mdir/*
+*.gpkg
+*.geojson
+*.tif
+*.tiff
+*.parquet
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+**/__pycache__/**
+.env
+**egg-info/**
+**/*.joblib
+geonorge/*
+niva/*.xml
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+poetry.lock
