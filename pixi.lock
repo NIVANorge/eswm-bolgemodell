@@ -10258,7 +10258,7 @@ packages:
 - pypi: ./
   name: waves
   version: 0.1.0
-  sha256: 8253345f4887939ca1e0db7db72ee275a010996a616c58eb722a75e60ede8b99
+  sha256: 0cdb164e9e05ee59c3d76e1d4fcdc68aaf8e2f6079a86740adc22c4671b1b7e7
   requires_dist:
   - geoalchemy2>=0.18.1
   - geopandas>=1.1.2

@@ -28,8 +28,8 @@ def bolge_model_data():
     root_path = Path(__file__).resolve().parent.parent
     raster_path = root_path / "niva" / "EswmRaster.tif"
     filled_path = root_path / "niva" / "EswmRaster_to_fill.tif"
-    clipped_path = root_path / "niva" / "EswmRaster_clipped.tif"
-    cog_path = root_path / "niva" / "EswmRaster_clipped_cog.tif"
+    clipped_path = root_path / "niva" / "EswmRaster_filled_clipped.tif"
+    cog_path = root_path / "niva" / "EswmRaster_filled_clipped_cog.tif"
     outline_mask_path = root_path / "niva" / "tmp_outline_mask.tif"
     tmp_gpkg = root_path / "niva" / "tmp_mv_outline.gpkg"
     tmp_coarse_path = root_path / "niva" / "tmp_coarse.tif"
