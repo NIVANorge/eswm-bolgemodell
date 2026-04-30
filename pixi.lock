@@ -243,6 +243,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/f2/5e/327428a034407651a048f5e624361adf3f9fbac9d0fa98e981e9c6ff2f5e/sqlalchemy-2.0.48-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/f1/7b/ce1eafaf1a76852e2ec9b22edecf1daa58175c090266e9f6c64afcd81d91/stack_data-0.6.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f0/3fe8c6e69135a845f4106f2ff8b6805638d4e85c264e70114e8126689587/tokenize_rt-6.2.0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6f/7a/2a8ea3b2b6e50cbec74c53082b69617d71f31e1247e35e65bf9a6edc44cf/topojson-1.10-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c7/b0/003792df09decd6849a5e39c28b513c06e84436a54440380862b5aeff25d/tzdata-2025.3-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/68/5a/199c59e0a824a3db2b89c5d2dade7ab5f9624dbf6448dc291b46d5ec94d3/wcwidth-0.6.0-py3-none-any.whl
       - pypi: ./
@@ -473,6 +474,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/46/2c/9664130905f03db57961b8980b05cab624afd114bf2be2576628a9f22da4/sqlalchemy-2.0.48-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f1/7b/ce1eafaf1a76852e2ec9b22edecf1daa58175c090266e9f6c64afcd81d91/stack_data-0.6.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f0/3fe8c6e69135a845f4106f2ff8b6805638d4e85c264e70114e8126689587/tokenize_rt-6.2.0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6f/7a/2a8ea3b2b6e50cbec74c53082b69617d71f31e1247e35e65bf9a6edc44cf/topojson-1.10-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c7/b0/003792df09decd6849a5e39c28b513c06e84436a54440380862b5aeff25d/tzdata-2025.3-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/68/5a/199c59e0a824a3db2b89c5d2dade7ab5f9624dbf6448dc291b46d5ec94d3/wcwidth-0.6.0-py3-none-any.whl
       - pypi: ./
@@ -702,6 +704,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/f7/b3/f437eaa1cf028bb3c927172c7272366393e73ccd104dcf5b6963f4ab5318/sqlalchemy-2.0.48-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/f1/7b/ce1eafaf1a76852e2ec9b22edecf1daa58175c090266e9f6c64afcd81d91/stack_data-0.6.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f0/3fe8c6e69135a845f4106f2ff8b6805638d4e85c264e70114e8126689587/tokenize_rt-6.2.0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6f/7a/2a8ea3b2b6e50cbec74c53082b69617d71f31e1247e35e65bf9a6edc44cf/topojson-1.10-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c7/b0/003792df09decd6849a5e39c28b513c06e84436a54440380862b5aeff25d/tzdata-2025.3-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/68/5a/199c59e0a824a3db2b89c5d2dade7ab5f9624dbf6448dc291b46d5ec94d3/wcwidth-0.6.0-py3-none-any.whl
       - pypi: ./
@@ -918,6 +921,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/95/7e/e83615cb63f80047f18e61e31e8e32257d39458426c23006deeaf48f463b/sqlalchemy-2.0.48-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/f1/7b/ce1eafaf1a76852e2ec9b22edecf1daa58175c090266e9f6c64afcd81d91/stack_data-0.6.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/33/f0/3fe8c6e69135a845f4106f2ff8b6805638d4e85c264e70114e8126689587/tokenize_rt-6.2.0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6f/7a/2a8ea3b2b6e50cbec74c53082b69617d71f31e1247e35e65bf9a6edc44cf/topojson-1.10-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c7/b0/003792df09decd6849a5e39c28b513c06e84436a54440380862b5aeff25d/tzdata-2025.3-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/68/5a/199c59e0a824a3db2b89c5d2dade7ab5f9624dbf6448dc291b46d5ec94d3/wcwidth-0.6.0-py3-none-any.whl
       - pypi: ./
@@ -9981,6 +9985,22 @@ packages:
   - pkg:pypi/tomli?source=compressed-mapping
   size: 21453
   timestamp: 1768146676791
+- pypi: https://files.pythonhosted.org/packages/6f/7a/2a8ea3b2b6e50cbec74c53082b69617d71f31e1247e35e65bf9a6edc44cf/topojson-1.10-py3-none-any.whl
+  name: topojson
+  version: '1.10'
+  sha256: 0879d727c7798939e3268e8969fa87c2cd23274189fe3d8038a0fb11ff263925
+  requires_dist:
+  - numpy
+  - shapely
+  - packaging
+  - geopandas ; extra == 'dev'
+  - fiona ; extra == 'dev'
+  - geojson ; extra == 'dev'
+  - simplification ; extra == 'dev'
+  - pyshp ; extra == 'dev'
+  - altair ; extra == 'dev'
+  - ipywidgets ; extra == 'dev'
+  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.5-py314h5bd0f2a_0.conda
   sha256: ed8d06093ff530a2dae9ed1e51eb6f908fbfd171e8b62f4eae782d67b420be5a
   md5: dc1ff1e915ab35a06b6fa61efae73ab5
@@ -10258,11 +10278,12 @@ packages:
 - pypi: ./
   name: waves
   version: 0.1.0
-  sha256: 0cdb164e9e05ee59c3d76e1d4fcdc68aaf8e2f6079a86740adc22c4671b1b7e7
+  sha256: bc50f76c670a9e75aae4275719767f74f45357612da906ee7555fe972f2dea9b
   requires_dist:
   - geoalchemy2>=0.18.1
   - geopandas>=1.1.2
   - gdal>=3.12.2,<4.0.0
+  - topojson>=1.9
   - isort>=8.0.0
   - black>=26.3.0
   - nbqa>=1.9.1

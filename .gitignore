@@ -19,3 +19,4 @@ niva/*.xml
 .pixi/*
 !.pixi/config.toml
 poetry.lock
+*.gpkg
