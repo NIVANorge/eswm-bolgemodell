@@ -179,6 +179,36 @@ def polygonize(src_path: Path | str, dst_path: Path | str) -> None:
     vec_ds = src_ds = None
 
 
+def clip_to_aoi(src_path: Path | str, dst_path: Path | str, aoi_path: str) -> None:
+    """Clip a polygonized GeoPackage to an AOI boundary using GDAL.
+
+    Uses ``gdal.VectorTranslate`` (C++) for fast clipping.  GCS paths
+    (``gs://``) are automatically converted to GDAL's ``/vsigs/`` prefix so
+    the AOI parquet can be read directly without downloading it first.
+
+    Args:
+        src_path: Input GeoPackage (``wave_exposure`` layer).
+        dst_path: Output GeoPackage path.
+        aoi_path: Path or URI to the AOI GeoParquet (local or ``gs://``).
+    """
+    root_path = Path(__file__).resolve().parent.parent
+ 
+    tmp_gpkg = root_path / "niva" / "tmp_mv_outline.gpkg"
+
+    gpd.read_parquet(aoi_path).to_file(tmp_gpkg, driver="GPKG", layer="aoi")
+    ds = gdal.VectorTranslate(
+        str(dst_path),
+        str(src_path),
+        options=gdal.VectorTranslateOptions(
+            clipSrc=str(tmp_gpkg),
+            callback=gdal.TermProgress_nocb,
+        ),
+    )
+    ds = None
+    tmp_gpkg.unlink()
+    print(f"Clipped vectors saved: {dst_path}")
+
+
 # ── Geometry smoothing ────────────────────────────────────────────────────────
 
 
