@@ -164,8 +164,7 @@ def polygonize(src_path: Path | str, dst_path: Path | str) -> None:
 
     ogr_driver = ogr.GetDriverByName("GPKG")
     dst_path = Path(dst_path)
-    if dst_path.exists():
-        ogr_driver.DeleteDataSource(str(dst_path))
+    
     vec_ds = ogr_driver.CreateDataSource(str(dst_path))
 
     srs = osr.SpatialReference()
@@ -177,6 +176,19 @@ def polygonize(src_path: Path | str, dst_path: Path | str) -> None:
     gdal.Polygonize(src_band, mask_band, layer, 0, callback=gdal.TermProgress_nocb)
 
     vec_ds = src_ds = None
+
+
+def add_class_attributes(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Merge NiN 3 class attributes (trinn, navn_no, navn_en) into a GeoDataFrame.
+
+    Args:
+        gdf: GeoDataFrame with a ``class_int`` column.
+
+    Returns:
+        GeoDataFrame with added ``trinn``, ``navn_no``, and ``navn_en`` columns.
+    """
+    cols = ["class_int", "trinn", "navn_no", "navn_en"]
+    return gdf.merge(CLASSES[cols], on="class_int", how="left")
 
 
 def clip_to_aoi(src_path: Path | str, dst_path: Path | str, aoi_path: str) -> None:

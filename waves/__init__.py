@@ -1,3 +1,3 @@
-from waves import classify, prepare
+from waves import classify, paths, prepare
 
-__all__ = ["classify", "prepare"]
+__all__ = ["classify", "paths", "prepare"]

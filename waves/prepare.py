@@ -6,8 +6,13 @@ import pandas as pd
 import rasterio as rio
 from osgeo import gdal
 from osgeo_utils import gdal_calc
+from shapely.ops import unary_union
+import numpy as np
+from shapely.geometry import box
 
+import waves
 
+AREA_THRESHOLD = 37_611_003
 
 def bolge_model_data():
     """Prepare bølgemodell (wave exposure) raster data for processing.
@@ -173,3 +178,86 @@ def bolge_model_data():
     tmp_coarse_path.unlink(missing_ok=True)
     tmp_coarse_upsampled_path.unlink(missing_ok=True)
     tmp_coarse_merged_path.unlink(missing_ok=True)
+
+
+def split_geometry_grid(geom, n=10):
+    """Split geometry into n x n grid cells."""
+    minx, miny, maxx, maxy = geom.bounds
+    xs = np.linspace(minx, maxx, n + 1)
+    ys = np.linspace(miny, maxy, n + 1)
+    pieces = []
+    for i in range(n):
+        for j in range(n):
+            print(f"  Creating grid cell {i * n + j + 1}/{n * n}")
+            cell = box(xs[i], ys[j], xs[i + 1], ys[j + 1])
+            piece = geom.intersection(cell)
+            if not piece.is_empty:
+                pieces.append(piece)
+    return pieces
+
+
+def subtract_land(
+    land: gpd.GeoDataFrame,
+    checkpoint_path: Path | str,
+) -> gpd.GeoDataFrame:
+    """Subtract land polygons from a wave exposure GeoDataFrame and save a checkpoint.
+
+    Args:
+        gdf: Wave exposure polygons (e.g. from polygonize step).
+        land: Land polygons to subtract, in the same CRS as ``gdf``.
+        checkpoint_path: Path where the result is saved as a GeoPackage.
+
+    Returns:
+        GeoDataFrame with land areas removed.
+    """
+
+    checkpoint_gpkg = waves.paths.CHECKPOINT_FILE + ".gpkg"
+    checkpoint_idx = waves.paths.CHECKPOINT_FILE + ".idx"
+    if checkpoint_gpkg.exists():
+        print(f"Checkpoint already exists at {checkpoint_path}, loading...")
+        gdf = gpd.read_file(str(checkpoint_path))
+        with open(checkpoint_idx, "r") as f:
+            idx = int(f.read().strip())
+    else:
+        idx = 0
+        gdf = gpd.read_file(waves.paths.VRAW)
+    grunnlinje = gpd.read_file(waves.paths.GRUNNLINJE)
+
+    gdf = gpd.clip(gdf, grunnlinje)
+    gdf = gdf[~gdf.is_empty].reset_index(drop=True)
+
+    land  = gpd.read_file(waves.paths.LAND)
+
+    n = len(land.geometry)
+    for i, land_geom in enumerate(land.geometry[idx:], start=idx+1):
+        print(f"Subtracting land geometry {i} of {n}")
+        if land_geom.area > AREA_THRESHOLD:
+            pieces = split_geometry_grid(land_geom, n=10)
+            for j, piece in enumerate(pieces, 1):
+                print(f"  Processing piece {j}/{len(pieces)} of {land_geom.area/10000:.2f} ha")
+                mask = gdf.sindex.query(piece, predicate="intersects")
+                if len(mask) > 0:
+                    gdf.geometry.iloc[mask] = gdf.geometry.iloc[mask].difference(piece)
+            save_checkpoint(gdf, checkpoint_gpkg)
+            with open(checkpoint_idx, "w") as f:
+                f.write(str(i-1))
+        else:
+            mask = gdf.sindex.query(land_geom, predicate="intersects")
+            if len(mask) > 0:
+                gdf.geometry.iloc[mask] = gdf.geometry.iloc[mask].difference(land_geom)
+
+        if i % 10000 == 0:
+            print(f"  Checkpoint at {i} – saving to {checkpoint_gpkg}")
+            save_checkpoint(gdf, checkpoint_gpkg)
+            with open(checkpoint_idx, "w") as f:
+                f.write(str(i-1))
+
+    gdf = gdf[~gdf.is_empty].reset_index(drop=True)
+    save_checkpoint(gdf, checkpoint_gpkg)
+    print(f"Final checkpoint saved: {checkpoint_gpkg}")
+    gdf[~gdf.is_empty].to_file(waves.paths.CLIPPED, driver="GPKG")
+
+
+def save_checkpoint(gdf: gpd.GeoDataFrame, checkpoint_path: Path | str):
+    """Save a GeoDataFrame checkpoint."""
+    gdf[~gdf.is_empty].to_file(checkpoint_path, driver="GPKG")
