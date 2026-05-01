@@ -196,26 +196,16 @@ def split_geometry_grid(geom, n=10):
     return pieces
 
 
-def subtract_land(
-    land: gpd.GeoDataFrame,
-    checkpoint_path: Path | str,
-) -> gpd.GeoDataFrame:
+def subtract_land():
     """Subtract land polygons from a wave exposure GeoDataFrame and save a checkpoint.
 
-    Args:
-        gdf: Wave exposure polygons (e.g. from polygonize step).
-        land: Land polygons to subtract, in the same CRS as ``gdf``.
-        checkpoint_path: Path where the result is saved as a GeoPackage.
-
-    Returns:
-        GeoDataFrame with land areas removed.
     """
 
     checkpoint_gpkg = waves.paths.CHECKPOINT_FILE + ".gpkg"
     checkpoint_idx = waves.paths.CHECKPOINT_FILE + ".idx"
     if checkpoint_gpkg.exists():
-        print(f"Checkpoint already exists at {checkpoint_path}, loading...")
-        gdf = gpd.read_file(str(checkpoint_path))
+        print(f"Checkpoint already exists at {checkpoint_gpkg}, loading...")
+        gdf = gpd.read_file(str(checkpoint_gpkg))
         with open(checkpoint_idx, "r") as f:
             idx = int(f.read().strip())
     else:
