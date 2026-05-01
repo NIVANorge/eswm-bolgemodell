@@ -201,8 +201,8 @@ def subtract_land():
 
     """
 
-    checkpoint_gpkg = waves.paths.CHECKPOINT_FILE + ".gpkg"
-    checkpoint_idx = waves.paths.CHECKPOINT_FILE + ".idx"
+    checkpoint_gpkg = waves.paths.CHECKPOINT_FILE
+    checkpoint_idx = waves.paths.CHECKPOINT_FILE.with_suffix(".idx")
     if checkpoint_gpkg.exists():
         print(f"Checkpoint already exists at {checkpoint_gpkg}, loading...")
         gdf = gpd.read_file(str(checkpoint_gpkg))
