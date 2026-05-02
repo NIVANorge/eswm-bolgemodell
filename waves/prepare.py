@@ -9,6 +9,7 @@ from osgeo_utils import gdal_calc
 from shapely.ops import unary_union
 import numpy as np
 from shapely.geometry import box
+from time import time
 
 import waves
 
@@ -218,9 +219,17 @@ def subtract_land():
 
     land  = gpd.read_file(waves.paths.LAND)
 
+    time_start = time()
     n = len(land.geometry)
     for i, land_geom in enumerate(land.geometry[idx:], start=idx+1):
-        print(f"Subtracting land geometry {i} of {n}")
+        if i % 200 == 0:
+            print(f"Subtracting land geometry {i} of {n}")
+            time_elapsed = (time() - time_start) / 60
+            print(f"  Time elapsed: {time_elapsed:.2f} minutes")
+            n_pr_m = (i-idx)/(time_elapsed)
+            print(f"{n_pr_m:.1f} geometries/minute")
+            n_remaining = n - i
+            print(f"  Estimated time remaining: {n_remaining / n_pr_m:.2f} minutes")
         if land_geom.area > AREA_THRESHOLD:
             pieces = split_geometry_grid(land_geom, n=10)
             for j, piece in enumerate(pieces, 1):
