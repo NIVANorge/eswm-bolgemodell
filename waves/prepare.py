@@ -201,7 +201,7 @@ def subtract_land():
     """Subtract land polygons from a wave exposure GeoDataFrame and save a checkpoint.
 
     """
-
+    crs = "EPSG:25833"
     checkpoint_gpkg = waves.paths.CHECKPOINT_FILE
     checkpoint_idx = waves.paths.CHECKPOINT_FILE.with_suffix(".idx")
     if checkpoint_gpkg.exists():
@@ -213,7 +213,7 @@ def subtract_land():
         idx = 0
         gdf = gpd.read_file(waves.paths.VRAW)
     grunnlinje = gpd.read_file(waves.paths.GRUNNLINJE)
-
+    gdf = gdf.to_crs(crs)
     gdf = gpd.clip(gdf, grunnlinje)
     gdf = gdf[~gdf.is_empty].reset_index(drop=True)
 
