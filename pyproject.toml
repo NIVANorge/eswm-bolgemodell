@@ -38,7 +38,7 @@ skip_glob = '^((?!py$).)*$'    # this makes sort all Python files
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
+platforms = ["linux-64"]
 
 [tool.pixi.pypi-dependencies]
 waves = { path = ".", editable = true }
@@ -52,3 +52,7 @@ papermill = ">=2.7.0,<3"
 rasterio = ">=1.5.0,<2"
 pyarrow = ">=23.0.1,<24"
 matplotlib = ">=3.10.9,<4"
+grass = ">=8.4.2,<9"
+
+[tool.pixi.tasks]
+smooth = "python -m waves.smooth"
