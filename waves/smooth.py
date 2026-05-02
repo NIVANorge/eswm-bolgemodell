@@ -38,6 +38,8 @@ SMOOTH_ITERATIONS: int = 3
 # All GRASS commands run here inside an already-initialised GRASS session.
 
 def _run_inside_grass(input_gpkg: str, output_gpkg: str, cats_str: str) -> None:
+    import sqlite3  # noqa: PLC0415
+
     import grass.script as gs  # noqa: PLC0415
 
     print("Importing vector into GRASS …")
@@ -49,11 +51,34 @@ def _run_inside_grass(input_gpkg: str, output_gpkg: str, cats_str: str) -> None:
         overwrite=True,
     )
 
-    n_cats = cats_str.count(",") + 1 if cats_str else 0
+    cats = [int(c) for c in cats_str.split(",")]
+    n_cats = len(cats)
     print(
         f"Running v.generalize (chaiken, threshold={SMOOTH_THRESHOLD}m, "
         f"iterations={SMOOTH_ITERATIONS}) on {n_cats} features …"
     )
+
+    # Mark zigzag areas directly in the SQLite attribute table.
+    # Passing 100k+ cat IDs via the cats= argument hits the OS arg-list limit,
+    # so we add a boolean column and use where="is_zigzag=1" instead.
+    gs.run_command("v.db.addcolumn", map="polys", columns="is_zigzag INTEGER DEFAULT 0")
+
+    env = gs.gisenv()
+    db_path = (
+        Path(env["GISDBASE"])
+        / env["LOCATION_NAME"]
+        / env["MAPSET"]
+        / "sqlite"
+        / "sqlite.db"
+    )
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    cur.execute("CREATE TEMP TABLE zz_cats (cat INTEGER PRIMARY KEY)")
+    cur.executemany("INSERT OR IGNORE INTO zz_cats VALUES (?)", [(c,) for c in cats])
+    cur.execute("UPDATE polys SET is_zigzag=1 WHERE cat IN (SELECT cat FROM zz_cats)")
+    conn.commit()
+    conn.close()
+
     gs.run_command(
         "v.generalize",
         input="polys",
@@ -62,7 +87,7 @@ def _run_inside_grass(input_gpkg: str, output_gpkg: str, cats_str: str) -> None:
         threshold=SMOOTH_THRESHOLD,
         iterations=SMOOTH_ITERATIONS,
         layer=1,
-        cats=cats_str,
+        where="is_zigzag=1",
         type="area",
         overwrite=True,
     )
