@@ -202,6 +202,9 @@ def _to_multipolygon(geom):
         return MultiPolygon([geom])
     if isinstance(geom, MultiPolygon):
         return geom
+    if not hasattr(geom, "geoms"):
+        # LineString, Point, etc. — no polygon content, treat as empty
+        return Polygon()
     # GeometryCollection: extract polygon parts
     polys = []
     for part in geom.geoms:
@@ -209,7 +212,7 @@ def _to_multipolygon(geom):
             polys.append(part)
         elif isinstance(part, MultiPolygon):
             polys.extend(part.geoms)
-    return MultiPolygon(polys) if polys else geom
+    return MultiPolygon(polys) if polys else Polygon()
 
 
 def subtract_land():
