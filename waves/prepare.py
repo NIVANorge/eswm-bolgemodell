@@ -34,7 +34,6 @@ def bolge_model_data():
     gdal.UseExceptions()
 
     root_path = Path(__file__).resolve().parent.parent
-    raster_path = root_path / "niva" / "EswmRaster.tif"
     filled_path = root_path / "niva" / "EswmRaster_to_fill.tif"
     clipped_path = root_path / "niva" / "EswmRaster_filled_clipped.tif"
     cog_path = root_path / "niva" / "EswmRaster_filled_clipped_cog.tif"
@@ -49,7 +48,7 @@ def bolge_model_data():
     aoi[["geometry"]].to_file(tmp_gpkg, driver="GPKG", layer="aoi")
 
     # Read source raster metadata
-    with rio.open(raster_path) as src:
+    with rio.open(waves.paths.SOURCE) as src:
         b = src.bounds
         res_x, res_y = src.res
         src_width, src_height = src.width, src.height
@@ -77,7 +76,7 @@ def bolge_model_data():
     print("Copying raster for filling...")
     gdal.Translate(
         str(filled_path),
-        str(raster_path),
+        str(waves.paths.SOURCE),
         noData=0,
         creationOptions=["COMPRESS=DEFLATE", "TILED=YES", "BLOCKXSIZE=512", "BLOCKYSIZE=512", "BIGTIFF=IF_SAFER"],
     )
@@ -164,9 +163,9 @@ def bolge_model_data():
     )
     print("Filled COG saved:", filled_cog_path)
 
-    cog_path = root_path / "niva" / "EswmRaster_clipped_cog.tif"
+    
     gdal.Translate(
-        cog_path,
+        waves.paths.RASTER_FILLED_COG,
         clipped_path,
         creationOptions=[
             "COMPRESS=DEFLATE",
@@ -211,7 +210,7 @@ def subtract_land():
             idx = int(f.read().strip())
     else:
         idx = 0
-        gdf = gpd.read_file(waves.paths.VMERGED)
+        gdf = gpd.read_file(waves.paths.CLEANED_VECTOR)
     grunnlinje = gpd.read_file(waves.paths.GRUNNLINJE)
     gdf = gdf.to_crs(crs)
     gdf = gpd.clip(gdf, grunnlinje)
@@ -254,7 +253,7 @@ def subtract_land():
     gdf = gdf[~gdf.is_empty].reset_index(drop=True)
     save_checkpoint(gdf, checkpoint_gpkg)
     print(f"Final checkpoint saved: {checkpoint_gpkg}")
-    gdf[~gdf.is_empty].to_file(waves.paths.CLIPPED, driver="GPKG")
+    gdf[~gdf.is_empty].to_file(waves.paths.LAND_CLIPPED_VECTOR, driver="GPKG")
 
 
 def save_checkpoint(gdf: gpd.GeoDataFrame, checkpoint_path: Path | str):

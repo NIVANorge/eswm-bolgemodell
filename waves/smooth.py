@@ -65,8 +65,8 @@ def _run_inside_grass(input_raster: str, output_gpkg: str) -> None:
 
 
 def vectorize_raster(
-    input_raster: Path | str = paths.SIE,
-    output_gpkg: Path | str = paths.VRAW,
+    input_raster: Path | str = paths.CLASSIFIED_SIEVED,
+    output_gpkg: Path | str = paths.RAW_VECTOR,
 ) -> Path:
     """Vectorize *input_raster* and write polygons to *output_gpkg*."""
     input_raster = Path(input_raster).resolve()
@@ -121,8 +121,8 @@ def _merge_inside_grass(input_gpkg: str, output_gpkg: str, threshold: float) -> 
 
 
 def merge_small_polygons(
-    input_gpkg: Path | str = paths.VRAW,
-    output_gpkg: Path | str = paths.VMERGED,
+    input_gpkg: Path | str = paths.RAW_VECTOR,
+    output_gpkg: Path | str = paths.CLEANED_VECTOR,
     threshold: float = RMAREA_THRESHOLD,
 ) -> Path:
     """Merge polygons smaller than *threshold* m² into their largest neighbour.
