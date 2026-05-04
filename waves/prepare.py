@@ -34,9 +34,8 @@ def bolge_model_data():
     gdal.UseExceptions()
 
     root_path = Path(__file__).resolve().parent.parent
-    filled_path = root_path / "niva" / "EswmRaster_to_fill.tif"
-    clipped_path = root_path / "niva" / "EswmRaster_filled_clipped.tif"
-    cog_path = root_path / "niva" / "EswmRaster_filled_clipped_cog.tif"
+    tmp_filled_path = root_path / "niva" / "EswmRaster_to_fill.tif"
+    tmp_clipped_path = root_path / "niva" / "EswmRaster_filled_clipped.tif"
     outline_mask_path = root_path / "niva" / "tmp_outline_mask.tif"
     tmp_gpkg = root_path / "niva" / "tmp_mv_outline.gpkg"
     tmp_coarse_path = root_path / "niva" / "tmp_coarse.tif"
@@ -75,13 +74,13 @@ def bolge_model_data():
     # Copy raster with nodata=0 for in-place filling
     print("Copying raster for filling...")
     gdal.Translate(
-        str(filled_path),
+        str(tmp_filled_path),
         str(waves.paths.SOURCE),
         noData=0,
         creationOptions=["COMPRESS=DEFLATE", "TILED=YES", "BLOCKXSIZE=512", "BLOCKYSIZE=512", "BIGTIFF=IF_SAFER"],
     )
 
-    ds = gdal.Open(str(filled_path), gdal.GA_Update)
+    ds = gdal.Open(str(tmp_filled_path), gdal.GA_Update)
     band = ds.GetRasterBand(1)
 
     print("Filling nodata (0) inside outline...")
@@ -94,7 +93,7 @@ def bolge_model_data():
     print(f"Coarse fill: downsampling {downsample_factor}× ...")
     gdal.Warp(
         str(tmp_coarse_path),
-        str(filled_path),
+        str(tmp_filled_path),
         xRes=res_x * downsample_factor,
         yRes=res_y * downsample_factor,
         resampleAlg=gdal.GRA_Average,
@@ -127,7 +126,7 @@ def bolge_model_data():
     gdal_calc.Calc(
         calc="numpy.where(A==0, B, A)",
         outfile=str(tmp_coarse_merged_path),
-        A=str(filled_path),
+        A=str(tmp_filled_path),
         B=str(tmp_coarse_upsampled_path),
         type="Int32",
         NoDataValue=0,
@@ -136,11 +135,23 @@ def bolge_model_data():
         overwrite=True,
     )
 
+
+    gdal.Translate(
+         waves.paths.FILLED_COG,
+        tmp_coarse_merged_path,
+        creationOptions=[
+            "COMPRESS=DEFLATE",
+            "BIGTIFF=IF_SAFER"
+        ],
+        format="COG"
+    )
+    print("Filled COG saved:", waves.paths.FILLED_COG)
+
     src_nodata = 0
     print("Clipping raster to outline...")
     gdal_calc.Calc(
         calc=f"numpy.where(A==0, {src_nodata}, B)",
-        outfile=clipped_path,
+        outfile=tmp_clipped_path,
         A=outline_mask_path,
         B=tmp_coarse_merged_path,
         type="Int32",
@@ -149,32 +160,19 @@ def bolge_model_data():
         creation_options=["COMPRESS=DEFLATE", "TILED=YES", "BLOCKXSIZE=512", "BLOCKYSIZE=512", "BIGTIFF=IF_SAFER"],
         overwrite=True,
     )
-
-
-    filled_cog_path = root_path / "niva" / "EswmRaster_filled_cog.tif"
     gdal.Translate(
-        filled_cog_path,
-        tmp_coarse_merged_path,
+        waves.paths.FILLED_CLIPPED_COG,
+        tmp_clipped_path,
         creationOptions=[
             "COMPRESS=DEFLATE",
             "BIGTIFF=IF_SAFER"
         ],
         format="COG"
     )
-    print("Filled COG saved:", filled_cog_path)
-
-    
-    gdal.Translate(
-        waves.paths.RASTER_FILLED_COG,
-        clipped_path,
-        creationOptions=[
-            "COMPRESS=DEFLATE",
-            "BIGTIFF=IF_SAFER"
-        ],
-        format="COG"
-    )
-    print("COG saved:", cog_path)
+    print("COG saved:", waves.paths.FILLED_CLIPPED_COG)
     outline_mask_path.unlink()
+    tmp_filled_path.unlink(missing_ok=True)
+    tmp_clipped_path.unlink(missing_ok=True)
     tmp_coarse_path.unlink(missing_ok=True)
     tmp_coarse_upsampled_path.unlink(missing_ok=True)
     tmp_coarse_merged_path.unlink(missing_ok=True)
