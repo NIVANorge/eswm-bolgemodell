@@ -8,7 +8,7 @@ from osgeo import gdal
 from osgeo_utils import gdal_calc
 from shapely.ops import unary_union
 import numpy as np
-from shapely.geometry import box
+from shapely.geometry import box, MultiPolygon, Polygon
 from time import time
 
 import waves
@@ -194,6 +194,24 @@ def split_geometry_grid(geom, n=10):
     return pieces
 
 
+def _to_multipolygon(geom):
+    """Normalize a geometry to MultiPolygon, extracting only polygon parts."""
+    if geom is None or geom.is_empty:
+        return geom
+    if isinstance(geom, Polygon):
+        return MultiPolygon([geom])
+    if isinstance(geom, MultiPolygon):
+        return geom
+    # GeometryCollection: extract polygon parts
+    polys = []
+    for part in geom.geoms:
+        if isinstance(part, Polygon):
+            polys.append(part)
+        elif isinstance(part, MultiPolygon):
+            polys.extend(part.geoms)
+    return MultiPolygon(polys) if polys else geom
+
+
 def subtract_land():
     """Subtract land polygons from a wave exposure GeoDataFrame and save a checkpoint.
 
@@ -214,6 +232,7 @@ def subtract_land():
     gdf = gpd.clip(gdf, grunnlinje)
     gdf = gdf[~gdf.is_empty].reset_index(drop=True)
 
+    print(f"Starting land subtraction from geometry with {len(gdf)} features, starting at index {idx}...")
     land  = gpd.read_file(waves.paths.LAND)
 
     time_start = time()
@@ -227,21 +246,10 @@ def subtract_land():
             print(f"{n_pr_m:.1f} geometries/minute")
             n_remaining = n - i
             print(f"  Estimated time remaining: {n_remaining / n_pr_m:.2f} minutes")
-        if land_geom.area > AREA_THRESHOLD:
-            pieces = split_geometry_grid(land_geom, n=10)
-            for j, piece in enumerate(pieces, 1):
-                print(f"  Processing piece {j}/{len(pieces)} of {land_geom.area/10000:.2f} ha")
-                mask = gdf.sindex.query(piece, predicate="intersects")
-                if len(mask) > 0:
-                    gdf.geometry.iloc[mask] = gdf.geometry.iloc[mask].difference(piece)
-            save_checkpoint(gdf, checkpoint_gpkg)
-            with open(checkpoint_idx, "w") as f:
-                f.write(str(i-1))
-        else:
-            mask = gdf.sindex.query(land_geom, predicate="intersects")
-            if len(mask) > 0:
-                gdf.geometry.iloc[mask] = gdf.geometry.iloc[mask].difference(land_geom)
-
+        mask = gdf.geometry.intersects(land_geom)
+        if mask.any():
+            gdf.loc[mask, "geometry"] = gdf.loc[mask, "geometry"].difference(land_geom)
+            gdf["geometry"] = gdf["geometry"].apply(_to_multipolygon)
         if i % 10000 == 0:
             print(f"  Checkpoint at {i} – saving to {checkpoint_gpkg}")
             save_checkpoint(gdf, checkpoint_gpkg)
@@ -256,4 +264,7 @@ def subtract_land():
 
 def save_checkpoint(gdf: gpd.GeoDataFrame, checkpoint_path: Path | str):
     """Save a GeoDataFrame checkpoint."""
+    checkpoint_path = Path(checkpoint_path)
+    if checkpoint_path.exists():
+        checkpoint_path.unlink()
     gdf[~gdf.is_empty].to_file(checkpoint_path, driver="GPKG")
