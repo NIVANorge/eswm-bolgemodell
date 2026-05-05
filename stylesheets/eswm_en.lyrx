@@ -1,0 +1,193 @@
+{
+  "type": "CIMLayerDocument",
+  "version": "3.2.0",
+  "build": 36057,
+  "layers": [
+    "CIMPATH=raster/eswm_en.json"
+  ],
+  "layerDefinitions": [
+    {
+      "type": "CIMRasterLayer",
+      "name": "eswm_en",
+      "uRI": "CIMPATH=raster/eswm_en.json",
+      "visibility": true,
+      "showPopups": true,
+      "colorizer": {
+        "type": "CIMRasterUniqueValueColorizer",
+        "defaultColor": {
+          "type": "CIMRGBColor",
+          "values": [
+            130,
+            130,
+            130,
+            100
+          ]
+        },
+        "defaultLabel": "<all other values>",
+        "fieldName": "Value",
+        "groups": [
+          {
+            "type": "CIMRasterUniqueValueGroup",
+            "classes": [
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "1"
+                ],
+                "label": "LM-VF_0 — Minimal water movement, ≤ 1 200",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    237,
+                    248,
+                    251,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "2"
+                ],
+                "label": "LM-VF_a — Very sheltered, > 1 200, ≤ 4 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    178,
+                    226,
+                    226,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "3"
+                ],
+                "label": "LM-VF_b — Moderately sheltered, > 4 000, ≤ 10 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    102,
+                    194,
+                    164,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "4"
+                ],
+                "label": "LM-VF_c — Slightly sheltered, > 10 000, ≤ 50 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    35,
+                    139,
+                    69,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "5"
+                ],
+                "label": "LM-VF_d — Weakly exposed, > 50 000, ≤ 100 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    255,
+                    255,
+                    178,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "6"
+                ],
+                "label": "LM-VF_e — Slightly exposed, > 100 000, ≤ 500 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    254,
+                    204,
+                    92,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "7"
+                ],
+                "label": "LM-VF_f — Exposed, > 500 000, ≤ 1 000 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    253,
+                    141,
+                    60,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "8"
+                ],
+                "label": "LM-VF_g — Very exposed, > 1 000 000, ≤ 2 000 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    240,
+                    59,
+                    32,
+                    100
+                  ]
+                },
+                "visible": true
+              },
+              {
+                "type": "CIMRasterUniqueValueClass",
+                "values": [
+                  "9"
+                ],
+                "label": "LM-VF_h — Extremely exposed, > 2 000 000, ≤ 4 000 000",
+                "color": {
+                  "type": "CIMRGBColor",
+                  "values": [
+                    189,
+                    0,
+                    38,
+                    100
+                  ]
+                },
+                "visible": true
+              }
+            ],
+            "heading": "Value"
+          }
+        ],
+        "useDefaultColor": false
+      }
+    }
+  ]
+}
