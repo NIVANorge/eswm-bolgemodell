@@ -5,7 +5,7 @@ _NIVA_DIR = ROOT_PATH / "niva"
 AUX = ROOT_PATH / "aux"
 
 SOURCE = _NIVA_DIR / "EswmRaster.tif"
-FILLED_CLIPPED_COG = _NIVA_DIR / "EswmRasterFillFloat.tif"
+FILLED_CLIPPED_COG = _NIVA_DIR / "EswmRasterFill.tif"
 """Raster after filling and clipping"""
 FILLED_COG = _NIVA_DIR / "EswmRaster_filled_cog.tif"
 """Raster after filling used for creating vector"""

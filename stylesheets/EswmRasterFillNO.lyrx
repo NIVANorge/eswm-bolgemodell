@@ -3,13 +3,13 @@
   "version": "3.2.0",
   "build": 36057,
   "layers": [
-    "CIMPATH=raster/EswmRasterFillFloatNO.json"
+    "CIMPATH=raster/EswmRasterFillNO.json"
   ],
   "layerDefinitions": [
     {
       "type": "CIMRasterLayer",
-      "name": "EswmRasterFillFloatNO",
-      "uRI": "CIMPATH=raster/EswmRasterFillFloatNO.json",
+      "name": "EswmRasterFillNO",
+      "uRI": "CIMPATH=raster/EswmRasterFillNO.json",
       "visibility": true,
       "showPopups": true,
       "colorizer": {
