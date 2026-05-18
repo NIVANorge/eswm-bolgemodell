@@ -45,7 +45,7 @@ def bolge_model_data():
     tmp_filled_padded_path = root_path / "niva" / "tmp_filled_padded.tif"
 
     # Load and preprocess marine vanntyper
-    aoi = gpd.read_parquet("gs://niva-geodata/MarintNaturKart/aux/aoi_from_marine_vanntyper.geo.parquet").to_crs(crs)
+    aoi = gpd.read_parquet("gs://niva-geodata/eswm/aoi_from_marine_vanntyper.geo.parquet").to_crs(crs)
     aoi[["geometry"]].to_file(tmp_gpkg, driver="GPKG", layer="aoi")
 
     # Read source raster metadata
