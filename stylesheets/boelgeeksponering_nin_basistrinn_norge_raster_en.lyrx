@@ -136,7 +136,7 @@
                 "values": [
                   "7"
                 ],
-                "label": "LM-VF_f — Exposed, > 500 000, ≤ 1 000 000",
+                "label": "LM-VF_f — Moderately exposed, > 500 000, ≤ 1 000 000",
                 "color": {
                   "type": "CIMRGBColor",
                   "values": [

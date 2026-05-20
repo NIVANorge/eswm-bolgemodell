@@ -1,30 +1,21 @@
 """Generate QGIS categorized-symbol QML files for EswmVectorDirect.gpkg.
 
 Produces:
-  stylesheets/EswmVectorDirectNO.qml  (Norwegian labels)
-  stylesheets/EswmVectorDirectEN.qml  (English labels)
+  stylesheets/boelgeeksponering_nin_basistrinn_norge_vektor_no.qml  (Norwegian labels)
+  stylesheets/boelgeeksponering_nin_basistrinn_norge_vektor_en.qml  (English labels)
 
-Colors match the existing raster QML stylesheets.
+Labels and colors are read from the corresponding paletted raster QML files so
+that vector and raster stylesheets stay in sync.
 """
 
+import xml.etree.ElementTree as ET
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from waves.classify import CLASSES
 import waves
-# Same color sequence as the raster QMLs (classes 1–9 only)
-COLORS_HEX = [
-    "#EDF8FB",  # 1 – minimal
-    "#B2E2E2",  # 2 – svært beskyttet
-    "#66C2A4",  # 3 – temmelig beskyttet
-    "#238B45",  # 4 – litt beskyttet
-    "#FFFFB2",  # 5 – svakt eksponert
-    "#FECC5C",  # 6 – litt eksponert
-    "#FD8D3C",  # 7 – temmelig eksponert
-    "#F03B20",  # 8 – svært eksponert
-    "#BD0026",  # 9 – ekstremt eksponert
-]
+
+STYLESHEET_DIR = Path(__file__).resolve().parent.parent / "stylesheets"
 
 
 def hex_to_rgba(h: str) -> str:
@@ -33,18 +24,26 @@ def hex_to_rgba(h: str) -> str:
     return f"{r},{g},{b},255"
 
 
+def _read_raster_entries(lang: str) -> list[dict]:
+    """Parse paletteEntry elements from the NIN basistrinn raster QML for *lang*."""
+    raster_qml = STYLESHEET_DIR / f"boelgeeksponering_nin_basistrinn_norge_raster_{lang}.qml"
+    root = ET.parse(raster_qml).getroot()
+    return [
+        {"value": e.attrib["value"], "color": e.attrib["color"], "label": e.attrib["label"]}
+        for e in root.iter("paletteEntry")
+    ]
+
+
 def build_qml(lang: str) -> str:
-    label_col = "navn_no" if lang == "NO" else "navn_en"
-    rows = CLASSES[CLASSES["class_int"] <= 9][["class_int", "trinn", label_col]].to_dict("records")
+    entries = _read_raster_entries(lang)
 
     categories_xml = ""
     symbols_xml = ""
 
-    for i, row in enumerate(rows):
-        val = row["class_int"]
-        trinn = row["trinn"]
-        label = f"LM-VF_{trinn} \u2014 {row[label_col].capitalize()}"
-        color_hex = COLORS_HEX[i]
+    for i, entry in enumerate(entries):
+        val = entry["value"]
+        label = entry["label"]
+        color_hex = entry["color"]
         color_rgba = hex_to_rgba(color_hex)
 
         categories_xml += (
