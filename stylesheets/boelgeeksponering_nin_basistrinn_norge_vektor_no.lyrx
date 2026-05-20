@@ -68,7 +68,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_0 — Still water",
+                "label": "LM-VF_0 — Minimal vannforstyrrelse, ≤ 1 200",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -116,7 +116,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_a — Very sheltered",
+                "label": "LM-VF_a — Svært beskyttet, > 1 200, ≤ 4 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -164,7 +164,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_b — Moderately sheltered",
+                "label": "LM-VF_b — Temmelig beskyttet, > 4 000, ≤ 10 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -212,7 +212,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_c — Slightly sheltered",
+                "label": "LM-VF_c — Litt beskyttet, > 10 000, ≤ 50 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -260,7 +260,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_d — Weakly sheltered",
+                "label": "LM-VF_d — Svakt eksponert, > 50 000, ≤ 100 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -308,7 +308,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_e — Slightly exposed",
+                "label": "LM-VF_e — Litt eksponert, > 100 000, ≤ 500 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -356,7 +356,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_f — Moderately exposed",
+                "label": "LM-VF_f — Temmelig eksponert, > 500 000, ≤ 1 000 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -404,7 +404,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_g — Very exposed",
+                "label": "LM-VF_g — Svært eksponert, > 1 000 000, ≤ 2 000 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {
@@ -452,7 +452,7 @@
                     ]
                   }
                 ],
-                "label": "LM-VF_h — Extremely exposed",
+                "label": "LM-VF_h — Ekstremt eksponert, > 2 000 000, ≤ 4 000 000",
                 "symbol": {
                   "type": "CIMSymbolReference",
                   "symbol": {

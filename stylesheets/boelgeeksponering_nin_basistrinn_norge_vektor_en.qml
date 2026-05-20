@@ -3,15 +3,15 @@
   <renderer-v2 forceraster="0" symbollevels="0" type="categorizedSymbol"
                enableorderby="0" referencescale="-1" attr="class_int">
     <categories>
-      <category value="1" label="LM-VF_0 — Still water" symbol="0" render="true"/>
-      <category value="2" label="LM-VF_a — Very sheltered" symbol="1" render="true"/>
-      <category value="3" label="LM-VF_b — Moderately sheltered" symbol="2" render="true"/>
-      <category value="4" label="LM-VF_c — Slightly sheltered" symbol="3" render="true"/>
-      <category value="5" label="LM-VF_d — Weakly sheltered" symbol="4" render="true"/>
-      <category value="6" label="LM-VF_e — Slightly exposed" symbol="5" render="true"/>
-      <category value="7" label="LM-VF_f — Moderately exposed" symbol="6" render="true"/>
-      <category value="8" label="LM-VF_g — Very exposed" symbol="7" render="true"/>
-      <category value="9" label="LM-VF_h — Extremely exposed" symbol="8" render="true"/>
+      <category value="1" label="LM-VF_0 — Minimal water movement, ≤ 1 200" symbol="0" render="true"/>
+      <category value="2" label="LM-VF_a — Very sheltered, > 1 200, ≤ 4 000" symbol="1" render="true"/>
+      <category value="3" label="LM-VF_b — Moderately sheltered, > 4 000, ≤ 10 000" symbol="2" render="true"/>
+      <category value="4" label="LM-VF_c — Slightly sheltered, > 10 000, ≤ 50 000" symbol="3" render="true"/>
+      <category value="5" label="LM-VF_d — Weakly exposed, > 50 000, ≤ 100 000" symbol="4" render="true"/>
+      <category value="6" label="LM-VF_e — Slightly exposed, > 100 000, ≤ 500 000" symbol="5" render="true"/>
+      <category value="7" label="LM-VF_f — Moderately exposed, > 500 000, ≤ 1 000 000" symbol="6" render="true"/>
+      <category value="8" label="LM-VF_g — Very exposed, > 1 000 000, ≤ 2 000 000" symbol="7" render="true"/>
+      <category value="9" label="LM-VF_h — Extremely exposed, > 2 000 000, ≤ 4 000 000" symbol="8" render="true"/>
     </categories>
     <symbols>
       <symbol name="0" alpha="1" clip_to_extent="1" type="fill" force_rhr="0">
