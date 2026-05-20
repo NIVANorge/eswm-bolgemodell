@@ -1,0 +1,39 @@
+{
+  "type": "CIMLayerDocument",
+  "version": "3.2.0",
+  "build": 36057,
+  "layers": [
+    "CIMPATH=raster/boelgeeksponering_nin_basistrinn_norge_vektor_no.json"
+  ],
+  "layerDefinitions": [
+    {
+      "type": "CIMRasterLayer",
+      "name": "boelgeeksponering_nin_basistrinn_norge_vektor_no",
+      "uRI": "CIMPATH=raster/boelgeeksponering_nin_basistrinn_norge_vektor_no.json",
+      "visibility": true,
+      "showPopups": true,
+      "colorizer": {
+        "type": "CIMRasterUniqueValueColorizer",
+        "defaultColor": {
+          "type": "CIMRGBColor",
+          "values": [
+            130,
+            130,
+            130,
+            100
+          ]
+        },
+        "defaultLabel": "<all other values>",
+        "fieldName": "Value",
+        "groups": [
+          {
+            "type": "CIMRasterUniqueValueGroup",
+            "classes": [],
+            "heading": "Value"
+          }
+        ],
+        "useDefaultColor": false
+      }
+    }
+  ]
+}
