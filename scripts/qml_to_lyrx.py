@@ -2,7 +2,7 @@
 
 Supported QML renderer types:
 - paletteEntry       → CIMRasterUniqueValueColorizer   (paletted/classified raster)
-- singlebandpseudocolor → CIMRasterClassifyColorizer   (continuous/discrete raster)
+- singlebandpseudocolor → CIMRasterClassifyColorizer  (continuous/discrete raster)
 - categorizedSymbol  → CIMUniqueValueRenderer           (vector polygon layer)
 """
 
@@ -103,10 +103,13 @@ def build_lyrx_paletted_raster(name: str, entries: list[dict]) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def parse_continuous_raster(qml_path: Path) -> list[dict]:
+def parse_continuous_raster(qml_path: Path) -> tuple[list[dict], float]:
+    """Return (entries, minimum_break) parsed from a singlebandpseudocolor QML."""
     tree = ET.parse(qml_path)
     root = tree.getroot()
-    return [
+    shader = root.find(".//colorrampshader")
+    minimum_break = float(shader.attrib.get("minimumValue", 0)) if shader is not None else 0.0
+    entries = [
         {
             "value": float(item.attrib["value"]),
             "color": item.attrib["color"],
@@ -114,15 +117,16 @@ def parse_continuous_raster(qml_path: Path) -> list[dict]:
         }
         for item in root.iter("item")
     ]
+    return entries, minimum_break
 
 
-def build_lyrx_continuous_raster(name: str, entries: list[dict]) -> dict:
-    breaks = []
+def build_lyrx_continuous_raster(name: str, entries: list[dict], minimum_break: float = 0.0) -> dict:
+    class_breaks = []
     for entry in entries:
         r, g, b = hex_to_rgb(entry["color"])
-        breaks.append(
+        class_breaks.append(
             {
-                "type": "CIMRasterClassBreak",
+                "type": "CIMColorClassBreak",
                 "upperBound": entry["value"],
                 "label": entry["label"],
                 "color": {"type": "CIMRGBColor", "values": [r, g, b, 100]},
@@ -143,7 +147,8 @@ def build_lyrx_continuous_raster(name: str, entries: list[dict]) -> dict:
                 "colorizer": {
                     "type": "CIMRasterClassifyColorizer",
                     "classificationMethod": "Manual",
-                    "breaks": breaks,
+                    "minimumBreak": minimum_break,
+                    "classBreaks": class_breaks,
                     "defaultColor": {"type": "CIMRGBColor", "values": [130, 130, 130, 100]},
                     "defaultLabel": "<all other values>",
                     "fieldName": "Value",
@@ -265,8 +270,8 @@ def convert(qml_path: Path) -> Path:
         entries = parse_paletted_raster(qml_path)
         doc = build_lyrx_paletted_raster(name, entries)
     elif qml_type == "continuous_raster":
-        entries = parse_continuous_raster(qml_path)
-        doc = build_lyrx_continuous_raster(name, entries)
+        entries, minimum_break = parse_continuous_raster(qml_path)
+        doc = build_lyrx_continuous_raster(name, entries, minimum_break)
     elif qml_type == "vector":
         entries, field = parse_vector(qml_path)
         doc = build_lyrx_vector(name, entries, field)

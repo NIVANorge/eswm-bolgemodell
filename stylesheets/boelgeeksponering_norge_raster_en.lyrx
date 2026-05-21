@@ -15,9 +15,10 @@
       "colorizer": {
         "type": "CIMRasterClassifyColorizer",
         "classificationMethod": "Manual",
-        "breaks": [
+        "minimumBreak": 0.0,
+        "classBreaks": [
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 1200.0,
             "label": "LM-VF_0 — Minimal water movement, ≤ 1 200",
             "color": {
@@ -31,7 +32,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 4000.0,
             "label": "LM-VF_a — Very sheltered, > 1 200, ≤ 4 000",
             "color": {
@@ -45,7 +46,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 10000.0,
             "label": "LM-VF_b — Moderately sheltered, > 4 000, ≤ 10 000",
             "color": {
@@ -59,7 +60,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 50000.0,
             "label": "LM-VF_c — Slightly sheltered, > 10 000, ≤ 50 000",
             "color": {
@@ -73,7 +74,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 100000.0,
             "label": "LM-VF_d — Weakly exposed, > 50 000, ≤ 100 000",
             "color": {
@@ -87,7 +88,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 500000.0,
             "label": "LM-VF_e — Slightly exposed, > 100 000, ≤ 500 000",
             "color": {
@@ -101,7 +102,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 1000000.0,
             "label": "LM-VF_f — Moderately exposed, > 500 000, ≤ 1 000 000",
             "color": {
@@ -115,7 +116,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 2000000.0,
             "label": "LM-VF_g — Very exposed, > 1 000 000, ≤ 2 000 000",
             "color": {
@@ -129,7 +130,7 @@
             }
           },
           {
-            "type": "CIMRasterClassBreak",
+            "type": "CIMColorClassBreak",
             "upperBound": 4000000.0,
             "label": "LM-VF_h — Extremely exposed, > 2 000 000, ≤ 4 000 000",
             "color": {
