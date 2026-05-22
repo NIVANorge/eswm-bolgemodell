@@ -6,6 +6,8 @@
 #   ./upload_to_azure.sh            # dry run (default): prints config, no upload
 #   ./upload_to_azure.sh --dry-run  # same as above
 #   ./upload_to_azure.sh --no-dry-run  # perform the actual upload
+#   ./upload_to_azure.sh --list        # list files already at destination
+#   ./upload_to_azure.sh --get-readme  # download README.txt from destination
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -29,12 +31,29 @@ echo "SAS expires: $(echo "$SAS_QUERY" | grep -o 'se=[^&]*' | sed 's/se=//' | py
 echo ""
 
 DRY_RUN=true
+LIST=false
+GET_README=false
 for arg in "$@"; do
     case "$arg" in
         --no-dry-run) DRY_RUN=false ;;
         --dry-run)    DRY_RUN=true ;;
+        --list)       LIST=true ;;
+        --get-readme) GET_README=true ;;
     esac
 done
+
+if [ "$GET_README" = true ]; then
+    echo "Downloading README.txt from destination..."
+    rclone copyto ":azureblob,sas_url='${SAS_URL}':${AZURE_CONTAINER}/${AZURE_PATH}/README.txt" \
+        "$SCRIPT_DIR/README.txt"
+    exit $?
+fi
+
+if [ "$LIST" = true ]; then
+    echo "Listing files at destination..."
+    rclone ls ":azureblob,sas_url='${SAS_URL}':${AZURE_CONTAINER}/${AZURE_PATH}"
+    exit $?
+fi
 
 if [ "$DRY_RUN" = true ]; then
     echo "Dry run — pass '--no-dry-run' to perform the actual upload."
