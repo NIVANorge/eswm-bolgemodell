@@ -54,7 +54,7 @@ if [ "$PRINT_REMOTE" = true ]; then
     exit 0
 fi
 
-
+if [ "$CLEAN" = true ]; then
     echo "WARNING: This will delete all files at the destination:"
     echo "  ${DEST}"
     echo ""
@@ -68,6 +68,7 @@ fi
         --rmdirs \
         --exclude "README.txt"
     exit $?
+    
 fi
 
 
